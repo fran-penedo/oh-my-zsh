@@ -14,6 +14,8 @@ function theme_precmd {
     local promptsize=${#${(%):---(%n@%m)---()--}}
     local rubyprompt=`rvm_prompt_info || rbenv_prompt_info`
     local rubypromptsize=${#${rubyprompt}}
+    local venvprompt=`virtualenv_prompt_info`
+    local venvpromptsize=${#${venvprompt}}
     local pwdsize=${#${(%):-%~}}
     local gitprompta
     gitprompta=`git_prompt_info`
@@ -25,10 +27,10 @@ function theme_precmd {
 #    local gitsizeb=${#${gitpromptb}}
     local gitsizeb=${#${(S%%)gitpromptb//$~zero/}} 
 
-    if [[ "$promptsize + $rubypromptsize + $pwdsize + $gitsizea + $gitsizeb" -gt $TERMWIDTH ]]; then
+    if [[ "$promptsize + $rubypromptsize + $venvpromptsize + $pwdsize + $gitsizea + $gitsizeb" -gt $TERMWIDTH ]]; then
       ((PR_PWDLEN=$TERMWIDTH - $promptsize))
     else
-      PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $rubypromptsize + $pwdsize + $gitsizea + $gitsizeb - 1)))..${PR_HBAR}.)}"
+      PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $rubypromptsize + $venvpromptsize + $pwdsize + $gitsizea + $gitsizeb - 1)))..${PR_HBAR}.)}"
     fi
 
 }
@@ -138,7 +140,7 @@ setprompt () {
 $PR_CYAN$PR_ULCORNER$PR_HBAR$PR_GREY(\
 $PR_GREEN%$PR_PWDLEN<...<%~%<<\
 $PR_LIGHT_BLUE%{$reset_color%}`git_prompt_info``git_prompt_status`\
-$PR_GREY)`rvm_prompt_info || rbenv_prompt_info`$PR_CYAN$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_HBAR$PR_GREY(\
+$PR_GREY)`virtualenv_prompt_info``rvm_prompt_info || rbenv_prompt_info`$PR_CYAN$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_HBAR$PR_GREY(\
 $PR_CYAN%(!.%SROOT%s.%n)$PR_GREY@$PR_GREEN%m\
 $PR_GREY)$PR_CYAN$PR_HBAR$PR_URCORNER\
 
