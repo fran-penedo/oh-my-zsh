@@ -30,7 +30,7 @@ function theme_precmd {
     if [[ "$promptsize + $rubypromptsize + $venvpromptsize + $pwdsize + $gitsizea + $gitsizeb" -gt $TERMWIDTH ]]; then
       ((PR_PWDLEN=$TERMWIDTH - $promptsize))
     else
-      PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $rubypromptsize + $venvpromptsize + $pwdsize + $gitsizea + $gitsizeb - 1)))..${PR_HBAR}.)}"
+      PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $rubypromptsize + $venvpromptsize + $pwdsize + $gitsizea + $gitsizeb)))..${PR_HBAR}.)}"
     fi
 
 }
