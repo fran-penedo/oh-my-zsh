@@ -28,7 +28,7 @@ function theme_precmd {
     local gitsizeb=${#${(S%%)gitpromptb//$~zero/}} 
 
     if [[ "$promptsize + $rubypromptsize + $venvpromptsize + $pwdsize + $gitsizea + $gitsizeb" -gt $TERMWIDTH ]]; then
-      ((PR_PWDLEN=$TERMWIDTH - $promptsize))
+      ((PR_PWDLEN=$TERMWIDTH - $promptsize - $venvpromptsize - $rubypromptsize))
     else
       PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $rubypromptsize + $venvpromptsize + $pwdsize + $gitsizea + $gitsizeb)))..${PR_HBAR}.)}"
     fi
@@ -138,9 +138,9 @@ setprompt () {
 
     PROMPT='$PR_SET_CHARSET$PR_STITLE${(e)PR_TITLEBAR}\
 $PR_CYAN$PR_ULCORNER$PR_HBAR$PR_GREY(\
-$PR_GREEN%$PR_PWDLEN<...<%~%<<\
+$PR_GREEN%$PR_PWDLEN<...<%~\
 $PR_LIGHT_BLUE%{$reset_color%}`git_prompt_info``git_prompt_status`\
-$PR_GREY)`virtualenv_prompt_info``rvm_prompt_info || rbenv_prompt_info`$PR_CYAN$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_HBAR$PR_GREY(\
+$PR_GREY%<<)`virtualenv_prompt_info``rvm_prompt_info || rbenv_prompt_info`$PR_CYAN$PR_HBAR$PR_HBAR${(e)PR_FILLBAR}$PR_HBAR$PR_GREY(\
 $PR_CYAN%(!.%SROOT%s.%n)$PR_GREY@$PR_GREEN%m\
 $PR_GREY)$PR_CYAN$PR_HBAR$PR_URCORNER\
 
@@ -151,13 +151,13 @@ $PR_HBAR\
 
     # display exitcode on the right when >0
     return_code="%(?..%{$fg[red]%}%? ↵ %{$reset_color%})"
-    RPROMPT=' $return_code$PR_CYAN$PR_HBAR\
+    RPROMPT='$return_code$PR_CYAN$PR_HBAR\
 $PR_CYAN$PR_LRCORNER$PR_NO_COLOUR'
 
     PS2='$PR_CYAN$PR_HBAR\
 $PR_BLUE$PR_HBAR(\
 $PR_LIGHT_GREEN%_$PR_BLUE)$PR_HBAR\
-$PR_CYAN$PR_HBAR$PR_NO_COLOUR '
+$PR_CYAN$PR_HBAR$PR_NO_COLOUR'
 }
 
 setprompt
